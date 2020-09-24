@@ -1,0 +1,67 @@
+{
+  "departments": [
+    {
+      "name": "Clothing",
+      "categories": [
+        "Baby",
+        "Clothes",
+        "Womans Clothes"
+      ]
+    },
+    {
+      "name": "Shoes",
+      "categories": [
+        "Dress shoe",
+        "Fashion boot",
+        "Driving moccasins",
+        "Climbing shoe",
+        "Desert Boot",
+        "Earth shoe"
+      ]
+    }
+  ],
+  "items": [
+    {
+      "id": "e76484a5-da2d-4048-a217-1b902aa3de7f",
+      "name": "Ankle boot",
+      "cost": "56.45",
+      "department": "Shoes",
+      "category": "Fashion boot"
+    },
+    {
+      "id": "9753dfb2-f055-4a31-864e-344bb629304b",
+      "name": "Calf-length boot",
+      "cost": "34.56",
+      "department": "Shoes",
+      "category": "Fashion boot"
+    },
+    {
+      "id": "047296a0-13f5-491e-8bb3-a7b5ad93ce43",
+      "name": "Traditional moccasin",
+      "cost": "45.56",
+      "department": "Shoes",
+      "category": "Driving moccasins"
+    },
+    {
+      "id": "954db561-8a28-4e34-9162-195babec8dee",
+      "name": "Moc Toe",
+      "cost": "45.80",
+      "department": "Shoes",
+      "category": "Driving moccasins"
+    },
+    {
+      "id": "211bd67a-6abd-4bf7-991d-ceec8ee4b617",
+      "name": "5-Pack Floral Original Bodysuits",
+      "cost": "13.20",
+      "department": "Clothing",
+      "category": "Baby"
+    },
+    {
+      "id": "e4633281-3507-470e-95b2-7def2b0c0347",
+      "name": "Christmas Collectible Bodysuit",
+      "cost": "12.45",
+      "department": "Clothing",
+      "category": "Baby"
+    }
+  ]
+}
