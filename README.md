@@ -4,6 +4,17 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
+### `npm run start-json-server`
+
+Runs the json-server rest API
+
+Endpoints
+
+
+ [http://localhost:3001/items](http://localhost:3001/items) to view items.
+ 
+ [http://localhost:3001/departments](http://localhost:3001/departments) to view departments.
+
 ### `npm start`
 
 Runs the app in the development mode.<br />
