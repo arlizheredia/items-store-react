@@ -16,14 +16,6 @@ import { ItemUtils } from "../../utils/items-utils";
  */
 class AddItem extends React.Component {
   /**
-   * Constructor.
-   * @param props Propiedades.
-   */
-  constructor(props) {
-    super(props);
-  }
-
-  /**
    * Agregar un producto.
    * @param e Evento.
    */
@@ -64,6 +56,7 @@ class AddItem extends React.Component {
               <Select
                 name="department"
                 labelId="department-label"
+                defaultValue=''
                 onChange={(e) => ItemUtils.onDepartmentChange(e, this.props)}
               >
                 {this.props.departments.map((department) => {
@@ -79,7 +72,7 @@ class AddItem extends React.Component {
           <div className="mb-2">
             <FormControl>
               <InputLabel id="category-label">Category</InputLabel>
-              <Select name="category" labelId="category-label">
+              <Select name="category" labelId="category-label" defaultValue=''>
                 {this.props.categories.map((category) => {
                   return (
                     <MenuItem key={category} value={category}>

@@ -17,14 +17,6 @@ import { ItemUtils } from "../../utils/items-utils";
  */
 class Item extends React.Component {
   /**
-   * Constructor.
-   * @param props Propiedades
-   */
-  constructor(props) {
-    super(props);
-  }
-
-  /**
    * Redirección para actualizar un producto.
    * @param item Producto.
    */
@@ -37,7 +29,7 @@ class Item extends React.Component {
    * @param itemId Identificador de un producto.
    */
   onDelete = (itemId) => {
-    ItemStoreUtils.deleteItem(itemId).then((value) => {
+    ItemStoreUtils.deleteItem(itemId).then(() => {
       ItemUtils.setItems(this.props);
     });
   };

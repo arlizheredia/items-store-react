@@ -8,14 +8,6 @@ import Item from "../Item/Item";
  * Implementa un componente para la visualización de productos.
  */
 class Items extends React.Component {
-  /**
-   * Constructor.
-   * @param props Propiedades
-   */
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return this.props.items.length > 0 ? (
       <div>

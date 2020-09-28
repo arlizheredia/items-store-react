@@ -13,10 +13,21 @@ export class ItemUtils {
       });
     });
   }
+
+  /**
+   * Al seleccionar un departamento.
+   * @param e Evento.
+   * @param props Propiedades.
+   */
   static onDepartmentChange = (e, props) => {
     ItemUtils.setCategoriesFromDepartment(e.target.value, props);
   };
 
+  /**
+   * Actualizar las categorías de un departamento.
+   * @param departmentName Nombre del departamento.
+   * @param props Propiedades.
+   */
   static setCategoriesFromDepartment(departmentName, props) {
     props.dispatch({
       type: SET_CATEGORIES,
