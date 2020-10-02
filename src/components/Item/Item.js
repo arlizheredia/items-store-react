@@ -1,71 +1,100 @@
-import React from "react";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import Avatar from "@material-ui/core/Avatar";
+import React, {useState} from "react";
+import {
+    Avatar,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    ListItem,
+    ListItemAvatar,
+    Tooltip
+} from "@material-ui/core";
 import Redeem from "@material-ui/icons/Redeem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { ItemStoreUtils } from "../../utils/item-store-utils";
-import { connect } from "react-redux";
-import { ItemUtils } from "../../utils/items-utils";
+import "./Item.css";
 
 /**
- * Implementa un producto.
+ * Implementa un componente presetacional para la visualización de un producto.
  */
-class Item extends React.Component {
-  /**
-   * Redirección para actualizar un producto.
-   * @param item Producto.
-   */
-  onUpdate = (item) => {
-    this.props.history.push(`/items/update/${item.id}`);
-  };
+const Item = (props) => {
 
-  /**
-   * Elimina un producto.
-   * @param itemId Identificador de un producto.
-   */
-  onDelete = (itemId) => {
-    ItemStoreUtils.deleteItem(itemId).then(() => {
-      ItemUtils.setItems(this.props);
-    });
-  };
+    /**
+     *  Hook para establecer el identificador de un producto seleccionado.
+     */
+    const [itemId, setItemId] = useState(0);
 
-  render() {
     return (
-      <ListItem>
-        <ListItemAvatar>
-          <Avatar>
-            <Redeem />
-          </Avatar>
-        </ListItemAvatar>
-        <ListItemText
-          primary={this.props.item.name}
-          secondary={`$${this.props.item.cost} - (${this.props.item.department}: ${this.props.item.category})`}
-        />
-        <ListItemSecondaryAction>
-          <IconButton
-            edge="end"
-            aria-label="edit"
-            onClick={() => this.onUpdate(this.props.item)}
-          >
-            <EditIcon />
-          </IconButton>
-
-          <IconButton
-            edge="end"
-            aria-label="delete"
-            onClick={() => this.onDelete(this.props.item.id)}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </ListItemSecondaryAction>
-      </ListItem>
-    );
-  }
+        <div>
+            <Dialog
+                disableBackdropClick
+                disableEscapeKeyDown
+                maxWidth="sm"
+                open={itemId !== 0}
+                aria-labelledby="confirmation-dialog-title"
+            >
+                <DialogTitle id="confirmation-dialog-title">Delete</DialogTitle>
+                <DialogContent>
+                    Delete this item from the Store?
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        type="button"
+                        className="outline"
+                        onClick={() => setItemId(0)}
+                        color="primary"
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        type="button"
+                        className="outline"
+                        onClick={() => props.onDelete(itemId)}
+                        color="primary"
+                    >
+                        Yes
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            {
+                props.item &&
+                <ListItem>
+                    <ListItemAvatar>
+                        <Avatar>
+                            <Redeem/>
+                        </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                        primary={props.item.name}
+                        secondary={`$${props.item.cost} - (${props.item.department}: ${props.item.category})`}
+                    />
+                    <ListItemSecondaryAction>
+                        <Tooltip title="Update Item">
+                            <IconButton
+                                edge="end"
+                                aria-label="edit"
+                                onClick={() => props.onUpdate(props.item)}
+                            >
+                                <EditIcon/>
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Delete Item">
+                            <IconButton
+                                edge="end"
+                                aria-label="delete"
+                                onClick={() => setItemId(props.item.id)}
+                            >
+                                <DeleteIcon/>
+                            </IconButton>
+                        </Tooltip>
+                    </ListItemSecondaryAction>
+                </ListItem>}
+        </div>
+    )
 }
 
-export default connect()(Item);
+export default (Item);

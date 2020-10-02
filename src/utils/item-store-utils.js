@@ -1,92 +1,81 @@
 /**
- * Servicio para la interacción con el Servidor.
+ * Url base del API JSON.
+ * @type {string}
  */
-import { Department } from "../model/department";
-import { Item } from "../model/item";
-
-export class ItemStoreUtils {
-  /**
-   * Url base del API JSON.
-   * @type {string}
-   */
-  static baseUrl = "http://localhost:3001";
-
-  /**
-   * Obtiene un producto por su identificador.
-   * @param id Identificador del producto.
-   * @returns {Promise<Response>}
-   */
-  static getItem = (id): Promise<Item> => {
-    return fetch(`${ItemStoreUtils.baseUrl}/items/${id}`).then((response) =>
-      response.json()
+const baseUrl = "http://localhost:3001";
+//const baseUrl = "";
+/**
+ * Obtiene un producto por su identificador.
+ * @param id Identificador del producto.
+ */
+export const getItem = (id) => {
+    return fetch(`${baseUrl}/items/${id}`).then((response) =>
+        response.json()
     );
-  };
+};
 
-  /**
-   * Obtiene todos los productos de la tienda.
-   * @returns {[]}
-   */
-  static getItems = (): Promise<Item[]> => {
-    return fetch(`${ItemStoreUtils.baseUrl}/items`).then((response) =>
-      response.json()
+/**
+ * Obtiene todos los productos de la tienda.
+ */
+export const getItems = () => {
+    return fetch(`${baseUrl}/items`).then((response) =>
+        response.json()
     );
-  };
+};
 
-  /**
-   * Obtiene los departamentos de la tienda.
-   * @returns {*[]}
-   */
-  static getDepartments = (): Promise<Department[]> => {
-    return fetch(`${ItemStoreUtils.baseUrl}/departments`).then((response) =>
-      response.json()
+/**
+ * Obtiene los departamentos de la tienda.
+ */
+export const getDepartments = () => {
+    return fetch(`${baseUrl}/departments`).then((response) =>
+        response.json()
     );
-  };
+};
 
-  /**
-   * Agrega un producto a la tienda.
-   * @param item Producto.
-   * @returns {Promise<Response>}
-   */
-  static addItem(item): Promise {
-    return fetch(`${ItemStoreUtils.baseUrl}/items`, {
-      method: "POST",
-      mode: "cors",
-      body: JSON.stringify(item),
-      headers: {
-        "Content-Type": "application/json",
-      },
+/**
+ * Agrega un producto a la tienda.
+ * @param item Producto.
+ */
+export const addItem = (item) => {
+    return fetch(`${baseUrl}/items`, {
+        method: "POST",
+        mode: "cors",
+        body: JSON.stringify(item),
+        headers: {
+            "Content-Type": "application/json",
+        },
     }).then((response) => response.json());
-  }
-
-  /**
-   * Actualiza un producto en la tienda.
-   * @param item Producto.
-   * @returns {Promise<Response>}
-   */
-  static updateItem(item): Promise {
-    return fetch(`${ItemStoreUtils.baseUrl}/items/${item.id}`, {
-      method: "PUT",
-      mode: "cors",
-      body: JSON.stringify(item),
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    }).then((response) => response.json());
-  }
-
-  /**
-   * Elimina un producto en la tienda.
-   * @param id Identificador del producto.
-   * @returns {Promise<Response>}
-   */
-  static deleteItem(id): Promise {
-    return fetch(`${ItemStoreUtils.baseUrl}/items/${id}`, {
-      method: "DELETE",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((response) => response.json());
-  }
 }
+
+/**
+ * Actualiza un producto en la tienda.
+ * @param item Producto.
+ * @returns {Promise<Response>}
+ */
+export const updateItem = (item) => {
+    return fetch(`${baseUrl}/items/${item.id}`, {
+        method: "PUT",
+        mode: "cors",
+        body: JSON.stringify(item),
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+    }).then((response) => response.json());
+}
+
+/**
+ * Elimina un producto en la tienda.
+ * @param id Identificador del producto.
+ * @returns {Promise<Response>}
+ */
+export const deleteItem = (id) => {
+    return fetch(`${baseUrl}/items/${id}`, {
+        method: "DELETE",
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then((response) => response.json());
+}
+
