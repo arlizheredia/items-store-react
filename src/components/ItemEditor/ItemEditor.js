@@ -1,30 +1,44 @@
-import React, {useState} from "react";
-import {connect} from "react-redux";
-import "./AddItem.css";
+import React, {useEffect, useState} from "react";
+import "./ItemEditor.css";
 import {Button, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
+import {connect} from "react-redux";
+import {addItem, getItem, updateItem} from "../../utils/item-store-utils";
 import {useFormik} from "formik";
-import {addItem} from "../../utils/item-store-utils";
 
 /**
- * Implementa un componente para agregar un producto.
+ * Implementa un componente para la actualización de un producto.
  */
-const AddItem = (props) => {
+const ItemEditor = (props) => {
     /**
      * Hooks
      */
     const [categories, setCategories] = useState([]);
+    const [itemUpdate, setItemUpdate] = useState(0);
+    const [updateMode, setUpdateMode] = useState(false);
+
+    useEffect(() => {
+        if (props.match.params.id) {
+            setUpdateMode(true);
+            // Obteniendo el producto.
+            getItem(props.match.params.id).then((item) => {
+                setCategoriesFromDepartment(item.department);
+                setItemUpdate(item);
+                formik.setValues(item);
+            });
+        }
+    }, [])
 
     /**
      * Formik wrapper para el Formulario.
      */
     const formik = useFormik({
         initialValues: {
-            name: '',
+            name: "",
             cost: 0,
-            department: '',
-            category: ''
+            department: "",
+            category: ""
         },
-
+        enableReinitialize: true,
         validate: values => {
             const errors = {};
             if (!values.name) errors.name = "Required";
@@ -36,23 +50,34 @@ const AddItem = (props) => {
         },
 
         onSubmit: values => {
-            const newItem = {
+            let item = {
                 name: values.name,
                 cost: values.cost,
                 department: values.department,
                 category: values.category
             };
 
-            addItem(newItem).then(() => {
-                props.history.push("/");
-            });
+            if (updateMode) {
+                item.id = itemUpdate.id;
+
+                updateItem(item).then(() => {
+                    props.history.push("/");
+                }).catch(reason => {
+                    console.error("An error occurred while trying to update the item ", reason);
+                });
+            } else {
+                addItem(item).then(() => {
+                    props.history.push("/");
+                }).catch(reason => {
+                    console.error("An error occurred while trying to create the item ", reason);
+                });
+            }
         }
     })
 
     /**
      * Actualizar las categorías de un departamento.
      * @param departmentName Nombre del departamento.
-     * @param props Lista de departamentos.
      */
     const setCategoriesFromDepartment = (departmentName) => {
         const department = props.departments.find(
@@ -66,16 +91,18 @@ const AddItem = (props) => {
 
     return (
         <div>
-            <h1>Add Item</h1>
-            {<form onSubmit={formik.handleSubmit}>
+            <h1>{updateMode ? "Update" : "Add"} Item</h1>
+            <form onSubmit={formik.handleSubmit}>
                 <div className="mb-2">
                     <TextField
                         name="name"
                         label="Name"
-                        onChange={formik.handleChange}
                         value={formik.values.name}
-                        required/>
-                    {formik.errors.name ? <div className="error">{formik.errors.name}</div> : null}
+                        onChange={formik.handleChange}
+                        error={formik.errors.name}
+                        helperText={formik.errors.name ? formik.errors.name : null}
+                        required
+                    />
                 </div>
                 <div className="mb-2">
                     <TextField
@@ -84,8 +111,10 @@ const AddItem = (props) => {
                         type="number"
                         onChange={formik.handleChange}
                         value={formik.values.cost}
-                        required/>
-                    {formik.errors.cost ? <div className="error">{formik.errors.cost}</div> : null}
+                        error={formik.errors.cost}
+                        helperText={formik.errors.cost ? formik.errors.cost : null}
+                        required
+                    />
                 </div>
                 <div className="mb-2">
                     <InputLabel id="department-label">Department</InputLabel>
@@ -93,22 +122,23 @@ const AddItem = (props) => {
                         name="department"
                         labelId="department-label"
                         value={formik.values.department}
+                        error={formik.errors.department}
+                        helperText={formik.errors.department ? formik.errors.department : null}
                         placeholder="Select department ..."
                         onChange={(e) => {
                             formik.handleChange(e);
-                            setCategoriesFromDepartment(e.target.value);
+                            setCategoriesFromDepartment(e.target.value, props.departments);
                         }}
                         required
                     >
                         {props.departments.map((department) => {
                             return (
-                                <MenuItem key={department.name} value={department.name}>
+                                <MenuItem key={department.id} value={department.name}>
                                     {department.name}
                                 </MenuItem>
                             );
                         })}
                     </Select>
-                    {formik.errors.department ? <div className="error">{formik.errors.department}</div> : null}
                 </div>
                 <div className="mb-2">
                     <InputLabel id="category-label">Category</InputLabel>
@@ -117,8 +147,11 @@ const AddItem = (props) => {
                         labelId="category-label"
                         onChange={formik.handleChange}
                         value={formik.values.category}
+                        error={formik.errors.category}
+                        helperText={formik.errors.category ? formik.errors.category : null}
                         placeholder="Select category ..."
-                        required>
+                        required
+                    >
                         {categories.map((category) => {
                             return (
                                 <MenuItem key={category.name} value={category.name}>
@@ -127,13 +160,12 @@ const AddItem = (props) => {
                             );
                         })}
                     </Select>
-                    {formik.errors.category ? <div className="error">{formik.errors.category}</div> : null}
                 </div>
 
                 <Button type="submit" variant="contained" color="primary">
-                    Add
+                    {updateMode ? "Update" : "Add"}
                 </Button>
-            </form>}
+            </form>
         </div>
     )
 }
@@ -142,4 +174,4 @@ export default connect((state) => {
     return {
         departments: state.departments
     };
-})(AddItem);
+})(ItemEditor);
